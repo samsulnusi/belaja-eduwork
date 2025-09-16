@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar Produk E-commerce</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f4f4f4;
+        color: #333;
+      }
+      h1,
+      h2 {
+        text-align: center;
+        color: #0056b3;
+      }
+      .filter-buttons {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .filter-buttons button {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        margin: 5px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+      }
+      .filter-buttons button:hover {
+        background-color: #0056b3;
+      }
+      .product-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .product-card {
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .product-card img {
+        max-width: 100%;
+        height: 180px; /* Fixed height for images */
+        object-fit: contain; /* Ensure image fits without cropping */
+        border-radius: 4px;
+        margin-bottom: 15px;
+      }
+      .product-card h3 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+        color: #333;
+      }
+      .product-card .price {
+        font-size: 1.3em;
+        color: #28a745;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      .product-card p {
+        font-size: 0.9em;
+        color: #666;
+        line-height: 1.5;
+        flex-grow: 1; /* Allow description to take available space */
+        margin-bottom: 15px;
+      }
+      .product-card .category {
+        font-size: 0.8em;
+        color: #999;
+        margin-top: auto; /* Push category to the bottom */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Toko Online Sederhana</h1>
+    <h2>Daftar Produk</h2>
+
+    <div class="filter-buttons">
+      <button onclick="filterProducts('all')">Semua Kategori</button>
+      <button onclick="filterProducts('elektronik')">Elektronik</button>
+      <button onclick="filterProducts('pakaian')">Pakaian</button>
+      <button onclick="filterProducts('makanan')">Makanan</button>
+      <button onclick="filterProducts('buku')">Buku</button>
+    </div>
+
+    <div id="product-list" class="product-list">
+      <!-- Produk akan ditampilkan di sini oleh JavaScript -->
+    </div>
+
+    <script>
+      // 1. Array data produk
+      const products = [
+        {
+          nama: "Smartphone Android X",
+          harga: 3500000,
+          deskripsi:
+            "Smartphone canggih dengan kamera 48MP dan baterai tahan lama. Ideal untuk segala aktivitas.",
+          gambar:
+            "https://via.placeholder.com/200x180/ADD8E6/000000?text=Smartphone", // Contoh URL gambar
+          kategori: "elektronik",
+        },
+        {
+          nama: "Laptop UltraBook Pro",
+          harga: 9200000,
+          deskripsi:
+            "Laptop tipis dan ringan, performa tinggi untuk pekerjaan profesional dan hiburan.",
+          gambar:
+            "https://via.placeholder.com/200x180/87CEFA/FFFFFF?text=Laptop",
+          kategori: "elektronik",
+        },
+        {
+          nama: "T-Shirt Katun Premium",
+          harga: 120000,
+          deskripsi:
+            "Kaos katun 100% premium, nyaman dipakai sehari-hari, tersedia berbagai ukuran dan warna.",
+          gambar:
+            "https://via.placeholder.com/200x180/FFB6C1/000000?text=T-Shirt",
+          kategori: "pakaian",
+        },
+        {
+          nama: "Celana Jeans Slim Fit",
+          harga: 280000,
+          deskripsi:
+            "Celana jeans model slim fit, bahan denim berkualitas tinggi, cocok untuk gaya kasual.",
+          gambar:
+            "https://via.placeholder.com/200x180/FFDAB9/000000?text=Jeans",
+          kategori: "pakaian",
+        },
+        {
+          nama: "Cokelat Bar Premium",
+          harga: 55000,
+          deskripsi:
+            "Cokelat hitam 70% kakao, rasa lezat dan kaya, cocok untuk pencinta cokelat sejati.",
+          gambar:
+            "https://via.placeholder.com/200x180/D2B48C/000000?text=Cokelat",
+          kategori: "makanan",
+        },
+        {
+          nama: "Kopi Arabika Pilihan",
+          harga: 85000,
+          deskripsi:
+            "Biji kopi Arabika pilihan dari pegunungan, aroma kuat dan rasa seimbang.",
+          gambar: "https://via.placeholder.com/200x180/CD853F/FFFFFF?text=Kopi",
+          kategori: "makanan",
+        },
+        {
+          nama: "Buku Novel Fiksi Modern",
+          harga: 95000,
+          deskripsi:
+            "Kisah fiksi modern yang memukau, alur cerita tak terduga, sangat direkomendasikan.",
+          gambar:
+            "https://via.placeholder.com/200x180/F0E68C/000000?text=Novel",
+          kategori: "buku",
+        },
+        {
+          nama: "Buku Resep Masakan Nusantara",
+          harga: 150000,
+          deskripsi:
+            "Kumpulan resep masakan tradisional Indonesia, lengkap dengan panduan langkah demi langkah.",
+          gambar:
+            "https://via.placeholder.com/200x180/F5DEB3/000000?text=Resep",
+          kategori: "buku",
+        },
+      ];
+
+      // Fungsi untuk memformat harga ke dalam mata uang Rupiah
+      function formatRupiah(number) {
+        return new Intl.NumberFormat("id-ID", {
+          style: "currency",
+          currency: "IDR",
+          minimumFractionDigits: 0,
+        }).format(number);
+      }
+
+      // 2. Fungsi untuk menampilkan produk di halaman
+      function displayProducts(productsToDisplay) {
+        const productListDiv = document.getElementById("product-list");
+        productListDiv.innerHTML = ""; // Kosongkan daftar produk sebelum menambahkan yang baru
+
+        productsToDisplay.forEach((product) => {
+          const productCard = document.createElement("div");
+          productCard.classList.add("product-card");
+
+          productCard.innerHTML = `
+                    <img src="${product.gambar}" alt="${product.nama}">
+                    <h3>${product.nama}</h3>
+                    <p class="price">${formatRupiah(product.harga)}</p>
+                    <p>${product.deskripsi}</p>
+                    <span class="category">Kategori: ${
+                      product.kategori.charAt(0).toUpperCase() +
+                      product.kategori.slice(1)
+                    }</span>
+                `;
+
+          productListDiv.appendChild(productCard);
+        });
+      }
+
+      // 3. Fungsi untuk filter produk berdasarkan kategori
+      function filterProducts(category) {
+        let filteredProducts = [];
+        if (category === "all") {
+          filteredProducts = products; // Tampilkan semua produk
+        } else {
+          // Saring produk berdasarkan kategori yang dipilih
+          filteredProducts = products.filter(
+            (product) => product.kategori === category
+          );
+        }
+        displayProducts(filteredProducts); // Tampilkan produk yang sudah difilter
+      }
+
+      // Panggil fungsi displayProducts saat halaman pertama kali dimuat
+      document.addEventListener("DOMContentLoaded", () => {
+        displayProducts(products); // Tampilkan semua produk secara default
+      });
+    </script>
+  </body>
+</html>
